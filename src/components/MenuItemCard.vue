@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { getItemColor, getUnit } from '../data/menu.js'
 import { useCartStore } from '../stores/cart.js'
 import { useToast } from '../composables/useToast.js'
@@ -12,24 +12,24 @@ const { show } = useToast()
 
 function handleAdd() {
   cartStore.addToCart(props.item.id)
-  show(`+1 ${props.item.name}`)
+  show('+1 ' + props.item.name)
 }
 </script>
 
 <template>
   <div class="menu-item">
-    <div class="menu-item-img" :style="{ background: getItemColor(item.id) }">
-      <span class="emoji-bg">{{ item.emoji }}</span>
-    </div>
+    <figure class="menu-item-img">
+      <img :src="item.image" :alt="item.name" class="menu-item-image" loading="lazy" />
+    </figure>
     <div class="menu-item-body">
       <div class="menu-item-name">{{ item.name }}</div>
       <div class="menu-item-desc">{{ item.desc }}</div>
       <div class="menu-item-footer">
         <span class="menu-item-price">
-          ¥{{ item.price }}
+          ￥{{ item.price }}
           <small>/{{ getUnit(item.cat) }}</small>
         </span>
-        <button class="add-btn" @click="handleAdd" :aria-label="`添加 ${item.name}`">+</button>
+        <button class="add-btn" @click="handleAdd" :aria-label="'添加 ' + item.name">+</button>
       </div>
     </div>
   </div>
@@ -52,25 +52,21 @@ function handleAdd() {
 }
 .menu-item-img{
   height:160px;
-  background:var(--color-warm);
-  display:flex;align-items:center;justify-content:center;
-  font-size:2.8rem;
   position:relative;
   overflow:hidden;
+  margin:0;
   transition:height 0.35s ease;
 }
 .menu-item:hover .menu-item-img{height:170px}
-.emoji-bg{
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-  transition:transform 0.35s cubic-bezier(0.16,1,0.3,1);
+.menu-item-image{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.45s cubic-bezier(0.16,1,0.3,1);
 }
-.menu-item:hover .emoji-bg{transform:scale(1.15) rotate(-5deg)}
+.menu-item:hover .menu-item-image{transform:scale(1.08)}
 .menu-item-img::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom, transparent 60%, rgba(44,36,24,0.06));
-  opacity:0;transition:opacity 0.35s ease;
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom, transparent 50%, rgba(44,36,24,0.25));
 }
-.menu-item:hover .menu-item-img::after{opacity:1}
 .menu-item-body{
   padding:16px 18px 18px;
   flex:1;display:flex;flex-direction:column;
@@ -100,6 +96,7 @@ function handleAdd() {
 .add-btn{
   width:36px;height:36px;border-radius:50%;
   background:var(--color-accent);color:#fff;
+  border:none;outline:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   font-size:1.2rem;font-weight:500;
   transition:all 0.25s cubic-bezier(0.16,1,0.3,1);
